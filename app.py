@@ -17,17 +17,28 @@ class App:
         self.rect_width = (self.width // self.grid_columns)
         self.rect_height = (self.height // self.grid_rows)
 
+        row_sums = [random.randint(1, 30) for x in range(self.grid_rows)]
+
         for row in range(self.grid_rows):
-            g_row = []
+            row_sum = row_sums[row]
+            remaining_sum = row_sum
+            grid_row = []
+            grid_row.append(Cell(0, row * self.rect_height, self.rect_width, self.rect_height, str(row_sum)))
             for col in range(self.grid_columns):
-                text = f"{random.randint(1, 20)}"
+                if (row == 0) and (col == 0):
+                    continue
+
+                text = str(random.randint(1, 20))
                 x = col * self.rect_width
                 y = row * self.rect_height
-                g_row.append(Cell(x, y, self.rect_width, self.rect_height, text))
-            self.grid.append(g_row)
+                grid_row.append(Cell(x, y, self.rect_width, self.rect_height, text))
+            self.grid.append(grid_row)
 
         self.running = True
  
+    def is_outer_cell(self, row, col):
+        return row == 0 or row == self.grid_rows - 1 or col == 0 or col == self.grid_columns - 1
+    
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self.running = False
