@@ -19,19 +19,23 @@ class App:
 
         row_sums = [random.randint(1, 30) for x in range(self.grid_rows)]
 
-        for row in range(self.grid_rows):
-            row_sum = row_sums[row]
-            remaining_sum = row_sum
+        for row, row_sum in enumerate(row_sums):
             grid_row = []
             grid_row.append(Cell(0, row * self.rect_height, self.rect_width, self.rect_height, str(row_sum)))
-            for col in range(self.grid_columns):
-                if (row == 0) and (col == 0):
-                    continue
-
-                text = str(random.randint(1, 20))
+            remaining_sum = row_sum
+            
+            for col in range(1, self.grid_columns):
+                if remaining_sum <= 0:
+                    text = str(random.randint(1, 20))
+                else:
+                    text = str(random.randint(1, remaining_sum))
+                    remaining_sum -= int(text)
                 x = col * self.rect_width
                 y = row * self.rect_height
                 grid_row.append(Cell(x, y, self.rect_width, self.rect_height, text))
+            
+            if (row == 0 and row_sum == row_sums[0]):
+                grid_row.pop(0)
             self.grid.append(grid_row)
 
         self.running = True
